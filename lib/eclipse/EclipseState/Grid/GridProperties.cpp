@@ -277,7 +277,7 @@ namespace Opm {
             setKeywordBox(record, boxManager);
             property.scale( factor , boxManager.getActiveBox() );
         } else
-            throw std::invalid_argument("Fatal error processing ADD keyword. Tried to shift not defined keyword " + field);
+            throw std::invalid_argument("Fatal error processing MULTIPLY keyword. Tried to scale not defined keyword " + field);
     }
 
 

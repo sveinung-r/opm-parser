@@ -869,7 +869,7 @@ namespace Opm {
             else if (m_intGridProperties.hasKeyword( field ))
                 m_intGridProperties.handleMULTIPLYRecord( record , boxManager );
             else
-                throw std::invalid_argument("Fatal error processing MULTIPLY keyword. Tried to shift not defined keyword " + field);
+                throw std::invalid_argument("Fatal error processing MULTIPLY keyword. Tried to scale not defined keyword " + field);
 
         }
     }
