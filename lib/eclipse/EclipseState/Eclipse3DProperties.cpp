@@ -499,7 +499,8 @@ namespace Opm {
             m_doubleGridProperties.postAddKeyword( "PORV",
                                                    std::numeric_limits<double>::quiet_NaN(),
                                                    initPORVProcessor,
-                                                   "Volume" );
+                                                   "Volume",
+                                                   true );
         }
 
         {
@@ -510,7 +511,8 @@ namespace Opm {
             m_intGridProperties.postAddKeyword( "ACTNUM",
                                                 1,
                                                 actnumPP ,
-                                                "1");
+                                                "1",
+                                                false );
         }
 
         processGridProperties(deck, eclipseGrid);
@@ -864,6 +866,9 @@ namespace Opm {
         for( const auto& record : deckKeyword ) {
             const std::string& field = record.getItem("field").get< std::string >(0);
 
+            if (m_doubleGridProperties.isDefaultInitializable(field)){
+                m_doubleGridProperties.assertKeyword(field);
+            }
             if (m_doubleGridProperties.hasKeyword( field ))
                 m_doubleGridProperties.handleMULTIPLYRecord( record , boxManager );
             else if (m_intGridProperties.hasKeyword( field ))
