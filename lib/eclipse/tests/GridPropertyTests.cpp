@@ -38,6 +38,8 @@
 #include <opm/parser/eclipse/EclipseState/Grid/GridProperties.hpp>
 #include <opm/parser/eclipse/EclipseState/Grid/GridProperty.hpp>
 #include <opm/parser/eclipse/EclipseState/Tables/TableManager.hpp>
+#include <opm/parser/eclipse/Units/Units.hpp>
+
 
 static const Opm::DeckKeyword createSATNUMKeyword( ) {
     const char* deckData =
@@ -538,8 +540,8 @@ BOOST_AUTO_TEST_CASE(addKeyword) {
 BOOST_AUTO_TEST_CASE(hasKeyword_assertKeyword) {
     typedef Opm::GridProperties<int>::SupportedKeywordInfo SupportedKeywordInfo;
     std::vector<SupportedKeywordInfo> supportedKeywords = {
-        SupportedKeywordInfo("SATNUM" , 0, "1"),
-        SupportedKeywordInfo("FIPNUM" , 0, "1")
+        SupportedKeywordInfo("SATNUM" , 0, "1", true),
+        SupportedKeywordInfo("FIPNUM" , 0, "1", true)
     };
     const Opm::EclipseGrid grid(10, 7, 9);
     const Opm::GridProperties<int> gridProperties( grid, std::move( supportedKeywords ) );
@@ -555,3 +557,58 @@ BOOST_AUTO_TEST_CASE(hasKeyword_assertKeyword) {
 
     BOOST_CHECK_THROW( gridProperties.getKeyword( "NOT-SUPPORTED" ), std::invalid_argument );
 }
+
+//BOOST_AUTO_TEST_CASE(GridPropertyInitialization2) {
+//    const char* deckString =
+//        "RUNSPEC\n"
+//        "\n"
+//        "OIL\n"
+//        "GAS\n"
+//        "WATER\n"
+//        "TABDIMS\n"
+//        "3 /\n"
+//        "\n"
+//        "METRIC\n"
+//        "\n"
+//        "DIMENS\n"
+//        "3 3 3 /\n"
+//        "\n"
+//        "GRID\n"
+//        "\n"
+//        "ACTNUM\n"
+//        " 0 8*1 0 8*1 0 8*1 /\n"
+//        "DXV\n"
+//        "1 1 1 /\n"
+//        "\n"
+//        "DYV\n"
+//        "1 1 1 /\n"
+//        "\n"
+//        "DZV\n"
+//        "1 1 1 /\n"
+//        "\n"
+//        "PERMX\n"
+//        "9*100 9*200/\n"
+//        "\n"
+//        "MULTIPLY\n"
+//        "PERMX 2 /\n"
+//        "/\n"
+//        "TOPS\n"
+//
+//        "9*100 /\n";
+//
+//
+//        Opm::ParseContext parseContext;
+//        Opm::Parser parser;
+//
+//        auto deck = parser.parseString(deckString, parseContext);
+//        Opm::TableManager tm(deck);
+//        Opm::EclipseGrid eg(deck);
+//        Opm::Eclipse3DProperties props(deck, tm, eg);
+//
+//        const auto& permx = props.getDoubleGridProperty("PERMX");
+//        BOOST_CHECK_CLOSE(200 * Opm::Metric::Permeability, permx.iget(0, 0, 0), 0.00001);
+//        BOOST_CHECK_CLOSE(400 * Opm::Metric::Permeability, permx.iget(1, 1, 1), 0.00001);
+//        BOOST_CHECK_CLOSE(200 * Opm::Metric::Permeability, permx.iget(2, 2, 2), 0.00001);
+//
+//}
+//
